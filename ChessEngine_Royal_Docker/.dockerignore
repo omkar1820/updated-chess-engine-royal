@@ -1,0 +1,19 @@
+# Git
+.git
+.gitignore
+
+# Build artifacts (rebuilt inside Docker)
+out/
+
+# Docs
+*.md
+README*
+
+# Deploy scripts (not needed inside container)
+scripts/
+deploy/
+
+# OS junk
+.DS_Store
+Thumbs.db
+*.log

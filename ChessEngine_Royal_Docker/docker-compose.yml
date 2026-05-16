@@ -1,0 +1,36 @@
+# ════════════════════════════════════════════════════════
+#  Chess Engine Royal — Docker Compose
+#  Usage:
+#    Local dev:   docker compose up --build
+#    With Java:   START_JAVA_SERVER=true docker compose up --build
+# ════════════════════════════════════════════════════════
+
+services:
+  chess:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: chess-engine-royal
+    restart: unless-stopped
+    ports:
+      - "80:80"          # Chess UI (HTTP)
+      - "9999:9999"      # Java TCP chess server (optional)
+    environment:
+      - START_JAVA_SERVER=${START_JAVA_SERVER:-false}
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost/health"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 15s
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+    volumes:
+      # Optional: persist logs on the host
+      - chess-logs:/var/log
+
+volumes:
+  chess-logs:
